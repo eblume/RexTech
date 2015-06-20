@@ -1,0 +1,10 @@
+LOCAL start_facing IS SHIP:FACING.
+LOCK STEERING TO start_facing.
+PRINT "IGNITION".
+LOCK THROTTLE TO 1.
+STAGE.
+WHEN ALT:RADAR > 1 THEN {
+    PRINT " !!! LIFTOFF !!! ".
+}
+
+
