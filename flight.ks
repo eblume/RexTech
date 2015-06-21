@@ -2,12 +2,14 @@ CLEARSCREEN.
 
 PARAMETER height, duration.
 
+RUN lib_pid.
+
 PRINT "========= BEGIN FLIGHT CONTROL PROGRAM ==========".
 
 RUN auto_gear.
 RUN launch.
 RUN ascent(height).
-RUN hover(height, duration).
+//RUN hover(height, duration).
 RUN land.
 
 

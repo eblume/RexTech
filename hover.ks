@@ -1,20 +1,38 @@
+@LAZYGLOBAL OFF.
+
 PARAMETER target_altitude, duration.
 
-RUN lib_pid.
-
-PRINT "Begin altitude hold program.".
-
-LOCAL ascent_pid IS PID_init(0.1, 0.06, 0.06, 0, 1).
-LOCAL to_throttle IS 0.
 LOCAL t0 is TIME:SECONDS.
+
+// THROTTLE PID
+LOCAL throttle_pid IS PID_init(0.1, 0.06, 0.06, 0, 1).
+LOCAL to_throttle IS 0.
 LOCK THROTTLE TO to_throttle.
 
+// PITCH/YAW PID
+LOCAL yaw_pid IS PID_init(2, 0.5, 0.5, -45, 45).
+LOCAL pitch_pid IS PID_init(2, 0.5, 0.5, -45, 45).
+LOCAL to_yaw IS 0.
+LOCAL to_pitch IS 0.
+LOCK STEERING TO SHIP:UP + R(to_pitch, to_yaw, 0).
+
+LOCAL rightspeed IS SHIP:VELOCITY:SURFACE * ship:facing:starvector.
+LOCAL topspeed IS SHIP:VELOCITY:SURFACE * ship:facing:topvector.
+
 UNTIL TIME:SECONDS - t0 >= duration {
-    SET to_throttle TO PID_seek(ascent_pid, target_altitude, SHIP:ALTITUDE).
+    SET rightspeed TO SHIP:VELOCITY:SURFACE * ship:facing:starvector.
+    SET topspeed TO SHIP:VELOCITY:SURFACE * ship:facing:topvector.
+    SET to_throttle TO PID_seek(throttle_pid, target_altitude, SHIP:ALTITUDE).
+    SET to_yaw TO PID_seek(yaw_pid, 0, rightspeed).
+    SET to_pitch TO -1 * PID_seek(pitch_pid, 0, topspeed).
+    
+    // Re-update t0 until we're 'hovering'
+    if (abs(ship:verticalspeed) > 2) and (abs(rightspeed) > 2) and (abs(topspeed) > 2) {
+        SET t0 TO TIME:SECONDS.
+    }
+    
     wait 0.001.
 }.
 
 LOCK THROTTLE TO 0.
-
-PRINT "Completed altitude hold program.".
 
