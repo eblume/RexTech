@@ -1,6 +1,6 @@
 @LAZYGLOBAL OFF.
 
-PARAMETER duration.
+PARAMETER target_altitude, duration.
 
 LOCAL t0 is TIME:SECONDS.
 
@@ -17,7 +17,7 @@ LOCAL to_pitch IS 0.
 LOCK STEERING TO SHIP:UP + R(to_pitch, to_yaw, 0).
 
 UNTIL TIME:SECONDS - t0 >= duration {
-    SET to_throttle TO PID_seek(throttle_pid, 0, SHIP:VERTICALSPEED).
+    SET to_throttle TO PID_seek(throttle_pid, target_altitude, SHIP:ALTITUDE).
     SET to_yaw TO PID_seek(yaw_pid, 0, SHIP:VELOCITY:SURFACE * ship:facing:starvector).
     SET to_pitch TO -1 * PID_seek(pitch_pid, 0, SHIP:VELOCITY:SURFACE * ship:facing:topvector).
     

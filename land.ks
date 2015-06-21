@@ -7,6 +7,7 @@ LOCK gravaccel TO KERBIN:MU / (KERBIN:RADIUS + SHIP:ALTITUDE)^2.
 LOCK twr TO SHIP:AVAILABLETHRUST / (gravaccel * SHIP:MASS).
 LOCK break_height TO (SHIP:VERTICALSPEED^2 / (2 * gravaccel * (twr - 1))).
 WAIT UNTIL radar_altitude() <= break_height + 100.
+
 PRINT "End descent program.".
 
 PRINT "Start landing program.".
