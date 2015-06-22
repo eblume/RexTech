@@ -3,6 +3,9 @@
 PARAMETER duration.
 
 LOCAL t0 is TIME:SECONDS.
+LOCAL target_altitude IS SHIP:ALTITUDE.
+
+PRINT "Holding altitude " + target_altitude + " for " + duration + " seconds.".
 
 // THROTTLE PID
 LOCAL throttle_pid IS PID_init(0.1, 0.06, 0.06, 0, 1).

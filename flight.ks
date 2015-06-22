@@ -9,7 +9,7 @@ PRINT "========= BEGIN FLIGHT CONTROL PROGRAM ==========".
 RUN auto_gear.
 RUN launch.
 RUN ascent(height).
-RUN hover(height, duration).
+RUN altitude_hold(duration).
 RUN land.
 
 
