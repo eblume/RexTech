@@ -17,12 +17,14 @@ UNTIL TIME:SECONDS - t0 >= duration {
     SET to_throttle TO PID_seek(throttle_pid, target_altitude, SHIP:ALTITUDE).
     
     // Re-update t0 until we're 'hovering'
-    if abs(ship:verticalspeed) > 2) {
+    if abs(ship:verticalspeed) > 2 {
         SET t0 TO TIME:SECONDS.
     }
     
     wait 0.001.
 }.
+
+PRINT "Finished altitude hold progragram.".
 
 LOCK THROTTLE TO 0.
 
